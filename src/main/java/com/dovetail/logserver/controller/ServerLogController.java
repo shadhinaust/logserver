@@ -16,7 +16,7 @@ import java.util.List;
 
 @Log4j2
 @RestController()
-public class LogController {
+public class ServerLogController {
 
     @Autowired
     ServerLogService serverLogService;
@@ -43,21 +43,29 @@ public class LogController {
     }
 
     @PostMapping("/save-log")
-    public ServerLog saveLog(@RequestBody ServerLogDto serverLogData) {
+    public ServerLogDto saveLog(@RequestBody ServerLogDto serverLogData) {
         ServerLog serverLog = ServerLog.builder()
                 .message(serverLogData.getMessage())
                 .format(serverLogData.getFormat())
                 .duration(serverLogData.getDuration())
                 .build();
 
+        ServerLogDto serverLogResponse;
         try {
             serverLogService.saveServerLog(serverLog);
+            serverLogResponse = ServerLogDto.builder()
+                    .id(serverLog.getId().toString())
+                    .dateTime(ServerLogUtils.toDateTimeString(serverLog.getDateTime()))
+                    .message(serverLog.getMessage())
+                    .format(serverLog.getFormat())
+                    .duration(serverLog.getDuration())
+                    .build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return ServerLog.builder().build();
+            return ServerLogDto.builder().build();
         }
 
-        return serverLog;
+        return serverLogResponse;
     }
 
     @PostMapping("/init-logs")
