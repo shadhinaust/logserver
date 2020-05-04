@@ -10,8 +10,4 @@ public class ServerLogUtils {
     public static String toDateTimeString(LocalDateTime localDateTime) {
         return localDateTime.format(formatter);
     }
-
-    public static LocalDateTime toLocalDateTime(String dateTime) {
-        return LocalDateTime.parse(dateTime, formatter);
-    }
 }

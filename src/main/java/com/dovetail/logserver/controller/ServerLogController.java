@@ -32,10 +32,10 @@ public class ServerLogController {
         serverLogService.findAllServerLogs().forEach(serverLog ->
                 serverLogs.add(ServerLogDto.builder()
                         .id(serverLog.getId().toString())
-						.dateTime(ServerLogUtils.toDateTimeString(serverLog.getDateTime()))
+                        .dateTime(ServerLogUtils.toDateTimeString(serverLog.getDateTime()))
                         .message(serverLog.getMessage())
-						.format(serverLog.getFormat())
-						.duration(serverLog.getDuration())
+                        .format(serverLog.getFormat())
+                        .duration(serverLog.getDuration())
                         .build())
         );
 
@@ -97,6 +97,4 @@ public class ServerLogController {
 
         return serverLogs;
     }
-
 }
-;

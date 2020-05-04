@@ -1,14 +1,14 @@
 package com.dovetail.logserver.service;
 
-import java.util.List;
-
 import com.dovetail.logserver.model.ServerLog;
 
+import java.util.List;
+
 public interface ServerLogService {
-	
-	String findGreeting();
-	
-	ServerLog saveServerLog(ServerLog serverLog);
-	
-	List<ServerLog> findAllServerLogs();
+
+    String findGreeting();
+
+    ServerLog saveServerLog(ServerLog serverLog);
+
+    List<ServerLog> findAllServerLogs();
 }

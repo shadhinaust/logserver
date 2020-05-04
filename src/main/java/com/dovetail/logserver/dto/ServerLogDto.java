@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ServerLogDto {
-	private String id;
-	private String dateTime;
-	private String message;
-	private String format;
-	private Long duration;
+    private String id;
+    private String dateTime;
+    private String message;
+    private String format;
+    private Long duration;
 }
