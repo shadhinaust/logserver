@@ -1,4 +1,4 @@
-package com.dovetail.logserver.model;
+package com.dovetail.logserver.models;
 
 import lombok.*;
 

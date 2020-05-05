@@ -1,7 +1,7 @@
-package com.dovetail.logserver.service;
+package com.dovetail.logserver.services;
 
-import com.dovetail.logserver.model.ServerLog;
-import com.dovetail.logserver.repository.ServerLogRepository;
+import com.dovetail.logserver.models.ServerLog;
+import com.dovetail.logserver.repositories.ServerLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
