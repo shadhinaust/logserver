@@ -9,6 +9,8 @@ import com.dovetail.logserver.utils.JwtUtils;
 import com.dovetail.logserver.utils.ServerLogUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,42 +37,44 @@ public class ServerLogController {
 
 
     @PostMapping({"/", "/auth"})
-    public String authenticate(@RequestBody UserDto userData) throws Exception {
+    public ResponseEntity authenticate(@RequestBody UserDto userData) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userData.getUsername(), userData.getPassword()));
         } catch (Exception ex) {
             log.error("Incorrect username or password", ex);
-            throw new Exception("Incorrect username or password", ex);
+            return new ResponseEntity<>("Incorrect username or password", HttpStatus.UNAUTHORIZED);
         }
         final UserDetails userDetails = userService.loadUserByUsername(userData.getUsername());
-        final String jwt = jwtUtils.generateToken(userDetails);
+        final String token = jwtUtils.generateToken(userDetails);
 
-        return jwt;
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @GetMapping("/greetings")
-    public String getGreeting() {
-        return serverLogService.findGreeting();
+    public ResponseEntity getGreeting() {
+        return new ResponseEntity<>(serverLogService.findGreeting(), HttpStatus.OK);
     }
 
     @GetMapping("/logs")
-    public List<ServerLogDto> getLogs() {
+    public ResponseEntity getLogs() {
         List<ServerLogDto> serverLogs = new ArrayList<>();
         serverLogService.findAllServerLogs().forEach(serverLog ->
                 serverLogs.add(ServerLogDto.builder()
                         .id(serverLog.getId().toString())
+                        .username(serverLog.getCreatedBy())
                         .dateTime(ServerLogUtils.toDateTimeString(serverLog.getDateTime()))
                         .message(serverLog.getMessage())
                         .format(serverLog.getFormat())
                         .duration(serverLog.getDuration())
+                        .createdAt(ServerLogUtils.toDateTimeString(serverLog.getCreatedAt()))
                         .build())
         );
 
-        return serverLogs;
+        return new ResponseEntity<>(serverLogs, HttpStatus.OK);
     }
 
     @PostMapping("/save-log")
-    public ServerLogDto saveLog(@RequestBody ServerLogDto serverLogData) {
+    public ResponseEntity saveLog(@RequestBody ServerLogDto serverLogData) {
         ServerLog serverLog = ServerLog.builder()
                 .message(serverLogData.getMessage())
                 .format(serverLogData.getFormat())
@@ -79,24 +83,26 @@ public class ServerLogController {
 
         ServerLogDto serverLogResponse;
         try {
-            serverLogService.saveServerLog(serverLog);
+            serverLog = serverLogService.saveServerLog(serverLog);
             serverLogResponse = ServerLogDto.builder()
                     .id(serverLog.getId().toString())
+                    .username(serverLog.getCreatedBy())
                     .dateTime(ServerLogUtils.toDateTimeString(serverLog.getDateTime()))
                     .message(serverLog.getMessage())
                     .format(serverLog.getFormat())
                     .duration(serverLog.getDuration())
+                    .createdAt(ServerLogUtils.toDateTimeString(serverLog.getCreatedAt()))
                     .build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return ServerLogDto.builder().build();
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return serverLogResponse;
+        return new ResponseEntity<>(serverLogResponse, HttpStatus.OK);
     }
 
     @PostMapping("/init-logs")
-    public List<ServerLogDto> initLogs() {
+    public ResponseEntity initLogs() {
         List<ServerLogDto> serverLogs = new ArrayList<>();
 
         ServerLog serverLog;
@@ -112,16 +118,18 @@ public class ServerLogController {
 
                 serverLogs.add(ServerLogDto.builder()
                         .id(serverLog.getId().toString())
+                        .username(serverLog.getCreatedBy())
                         .dateTime(ServerLogUtils.toDateTimeString(serverLog.getDateTime()))
                         .message(serverLog.getMessage())
                         .format(serverLog.getFormat())
                         .duration(serverLog.getDuration())
+                        .createdAt(ServerLogUtils.toDateTimeString(serverLog.getCreatedAt()))
                         .build());
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
         }
 
-        return serverLogs;
+        return new ResponseEntity<>(serverLogs, HttpStatus.OK);
     }
 }
