@@ -1,4 +1,4 @@
-package com.dovetail.logserver.dtos;
+package com.dovetail.logserver.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
-package com.dovetail.logserver.services;
+package com.dovetail.logserver.service;
 
-import com.dovetail.logserver.models.ServerLog;
+import com.dovetail.logserver.model.ServerLog;
 
 import java.util.List;
 

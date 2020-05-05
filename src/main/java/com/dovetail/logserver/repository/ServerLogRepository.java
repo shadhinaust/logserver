@@ -1,6 +1,6 @@
-package com.dovetail.logserver.repositories;
+package com.dovetail.logserver.repository;
 
-import com.dovetail.logserver.models.ServerLog;
+import com.dovetail.logserver.model.ServerLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ServerLogRepository extends JpaRepository<ServerLog, Long> {

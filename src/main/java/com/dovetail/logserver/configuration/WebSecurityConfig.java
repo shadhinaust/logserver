@@ -1,7 +1,7 @@
-package com.dovetail.logserver.configurations;
+package com.dovetail.logserver.configuration;
 
-import com.dovetail.logserver.filters.JwtRequestFilter;
-import com.dovetail.logserver.services.UserService;
+import com.dovetail.logserver.filter.JwtRequestFilter;
+import com.dovetail.logserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

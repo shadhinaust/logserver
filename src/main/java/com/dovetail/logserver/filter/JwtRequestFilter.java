@@ -1,6 +1,6 @@
-package com.dovetail.logserver.filters;
+package com.dovetail.logserver.filter;
 
-import com.dovetail.logserver.services.UserService;
+import com.dovetail.logserver.service.UserService;
 import com.dovetail.logserver.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

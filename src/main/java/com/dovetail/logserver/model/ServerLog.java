@@ -1,4 +1,4 @@
-package com.dovetail.logserver.models;
+package com.dovetail.logserver.model;
 
 import lombok.*;
 
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "server_logs")
-public class ServerLog {
+public class ServerLog extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

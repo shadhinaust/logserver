@@ -1,10 +1,10 @@
-package com.dovetail.logserver.controllers;
+package com.dovetail.logserver.controller;
 
-import com.dovetail.logserver.dtos.ServerLogDto;
-import com.dovetail.logserver.dtos.UserDto;
-import com.dovetail.logserver.models.ServerLog;
-import com.dovetail.logserver.services.ServerLogService;
-import com.dovetail.logserver.services.UserService;
+import com.dovetail.logserver.dto.ServerLogDto;
+import com.dovetail.logserver.dto.UserDto;
+import com.dovetail.logserver.model.ServerLog;
+import com.dovetail.logserver.service.ServerLogService;
+import com.dovetail.logserver.service.UserService;
 import com.dovetail.logserver.utils.JwtUtils;
 import com.dovetail.logserver.utils.ServerLogUtils;
 import lombok.extern.log4j.Log4j2;

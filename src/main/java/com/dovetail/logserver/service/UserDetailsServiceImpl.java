@@ -1,4 +1,4 @@
-package com.dovetail.logserver.services;
+package com.dovetail.logserver.service;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
