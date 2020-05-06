@@ -7,7 +7,6 @@ import com.dovetail.logserver.service.ServerLogService;
 import com.dovetail.logserver.service.UserService;
 import com.dovetail.logserver.utils.JwtUtils;
 import com.dovetail.logserver.utils.ServerLogUtils;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j2
 @RestController()
 public class ServerLogController {
 
@@ -35,13 +33,11 @@ public class ServerLogController {
     @Autowired
     private UserService userService;
 
-
     @PostMapping({"/", "/auth"})
     public ResponseEntity authenticate(@RequestBody UserDto userData) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userData.getUsername(), userData.getPassword()));
         } catch (Exception ex) {
-            log.error("Incorrect username or password", ex);
             return new ResponseEntity<>("Incorrect username or password", HttpStatus.UNAUTHORIZED);
         }
         final UserDetails userDetails = userService.loadUserByUsername(userData.getUsername());
@@ -94,7 +90,6 @@ public class ServerLogController {
                     .createdAt(ServerLogUtils.toDateTimeString(serverLog.getCreatedAt()))
                     .build();
         } catch (Exception ex) {
-            log.error(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
@@ -126,7 +121,6 @@ public class ServerLogController {
                         .createdAt(ServerLogUtils.toDateTimeString(serverLog.getCreatedAt()))
                         .build());
             } catch (Exception ex) {
-                log.error(ex.getMessage());
             }
         }
 
