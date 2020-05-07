@@ -19,11 +19,20 @@
             </Policies>
             <DefaultRolloverStrategy max="100" />
         </RollingFile>
+        <JDBC name="Database" tableName="application_log">
+            <DriverManager driverClassName="org.h2.Driver"/>
+            <Column name="eventDate" isEventTimestamp="true" />
+            <Column name="level" pattern="%level" />
+            <Column name="logger" pattern="%logger" />
+            <Column name="message" pattern="%message" />
+            <Column name="exception" pattern="%ex{full}" />
+        </JDBC>
     </Appenders>
     <Loggers>
         <Root level="info" additivity="false">
             <AppenderRef ref="Console" />
             <AppenderRef ref="FileRolling" />
+            <AppenderRef ref="Database" />
         </Root>
     </Loggers>
 </Configuration>

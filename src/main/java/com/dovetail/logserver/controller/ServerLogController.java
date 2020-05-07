@@ -3,6 +3,7 @@ package com.dovetail.logserver.controller;
 import com.dovetail.logserver.dto.ServerLogDto;
 import com.dovetail.logserver.dto.UserDto;
 import com.dovetail.logserver.model.ServerLog;
+import com.dovetail.logserver.service.LogsService;
 import com.dovetail.logserver.service.ServerLogService;
 import com.dovetail.logserver.service.UserService;
 import com.dovetail.logserver.utils.JwtUtils;
@@ -32,6 +33,8 @@ public class ServerLogController {
     private JwtUtils jwtUtils;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LogsService logsService;
 
     @PostMapping({"/", "/auth"})
     public ResponseEntity authenticate(@RequestBody UserDto userData) {
@@ -51,8 +54,8 @@ public class ServerLogController {
         return new ResponseEntity<>(serverLogService.findGreeting(), HttpStatus.OK);
     }
 
-    @GetMapping("/logs")
-    public ResponseEntity getLogs() {
+    @GetMapping("/server-logs")
+    public ResponseEntity getServerLogs() {
         List<ServerLogDto> serverLogs = new ArrayList<>();
         serverLogService.findAllServerLogs().forEach(serverLog ->
                 serverLogs.add(ServerLogDto.builder()
@@ -67,6 +70,11 @@ public class ServerLogController {
         );
 
         return new ResponseEntity<>(serverLogs, HttpStatus.OK);
+    }
+
+    @GetMapping("/logs")
+    public ResponseEntity getLogs() {
+        return new ResponseEntity<>(logsService.findAllLogs(), HttpStatus.OK);
     }
 
     @PostMapping("/save-log")
