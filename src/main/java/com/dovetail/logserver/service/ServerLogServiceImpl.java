@@ -5,7 +5,9 @@ import com.dovetail.logserver.repository.ServerLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ServerLogServiceImpl implements ServerLogService {
@@ -26,5 +28,13 @@ public class ServerLogServiceImpl implements ServerLogService {
     @Override
     public List<ServerLog> findAllServerLogs() {
         return serverLogRepository.findAll();
+    }
+
+    @Override
+    public String getError(String errorCode) {
+        if(errorCode == null) {
+            throw new NullPointerException("Nothing Found!");
+        }
+        return errorCode;
     }
 }

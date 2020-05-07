@@ -1,37 +1,36 @@
 package com.dovetail.logserver.advice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 @Aspect
+@Component
 public class LoggerAdvice {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoggerAdvice.class);
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private void execBeforeLogger(JoinPoint joinPoint) {
         LOG.info("Invoking: " + joinPoint.getSignature().toString());
     }
 
     private Object execAroundLogger(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        String className = proceedingJoinPoint.getTarget().getClass().toString();
-        String methodName = proceedingJoinPoint.getSignature().getName();
-        Object[] args = proceedingJoinPoint.getArgs();
-        LOG.info("Entered: " + className + " : " + methodName + "(" + MAPPER.writeValueAsString(args) + ")");
+        Long startTime = System.currentTimeMillis();
         Object response = proceedingJoinPoint.proceed();
-        LOG.info("Returned: " + className + " : " + methodName + "()" + " response : " + MAPPER.writeValueAsString(response));
+        Long endTime = System.currentTimeMillis();
+        LOG.info("Result fetched in " + (endTime - startTime) + " milliseconds.");
         return response;
     }
 
-    private void execAfterLogger(JoinPoint joinPoint) {
-        LOG.info("Invoked: " + joinPoint.getSignature().toString());
+    private void execAfterThrowingLogger(JoinPoint joinPoint, Exception ex) {
+        LOG.info("Exception occurred: " + ex.getMessage());
+        LOG.error(joinPoint.getSignature().toString() + "\nException Description: " + ex);
     }
 
     @Before("execution(* com.dovetail.logserver.controller.*.*(..))")
@@ -44,9 +43,9 @@ public class LoggerAdvice {
         return execAroundLogger(proceedingJoinPoint);
     }
 
-    @After("execution(* com.dovetail.logserver.controller.*.*(..))")
-    public void controllerLoggerAfter(JoinPoint joinPoint) {
-        execAfterLogger(joinPoint);
+    @AfterThrowing(value = "execution(* com.dovetail.logserver.controller.*.*(..))", throwing = "ex")
+    public void controllerLoggerAfter(JoinPoint joinPoint, Exception ex) {
+        execAfterThrowingLogger(joinPoint, ex);
     }
 
     @Before("execution(* com.dovetail.logserver.service.*.*(..))")
@@ -59,9 +58,9 @@ public class LoggerAdvice {
         return execAroundLogger(proceedingJoinPoint);
     }
 
-    @After("execution(* com.dovetail.logserver.service.*.*(..))")
-    public void serviceLoggerAfter(JoinPoint joinPoint) {
-        execAfterLogger(joinPoint);
+    @AfterThrowing(value = "execution(* com.dovetail.logserver.service.*.*(..))", throwing = "ex")
+    public void serviceLoggerAfter(JoinPoint joinPoint, Exception ex) {
+        execAfterThrowingLogger(joinPoint, ex);
     }
 
     @Before("execution(* com.dovetail.logserver.repository.*.*(..))")
@@ -74,8 +73,8 @@ public class LoggerAdvice {
         return execAroundLogger(proceedingJoinPoint);
     }
 
-    @After("execution(* com.dovetail.logserver.repository.*.*(..))")
-    public void repositoryLoggerAfter(JoinPoint joinPoint) {
-        execAfterLogger(joinPoint);
+    @AfterThrowing(value = "execution(* com.dovetail.logserver.repository.*.*(..))", throwing = "ex")
+    public void repositoryLoggerAfter(JoinPoint joinPoint, Exception ex) {
+        execAfterThrowingLogger(joinPoint, ex);
     }
 }

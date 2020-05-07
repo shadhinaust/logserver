@@ -109,8 +109,8 @@ public class ServerLogController {
                         .format(".mp3")
                         .duration(5000L)
                         .build();
-                serverLog = serverLogService.saveServerLog(serverLog);
 
+                serverLog = serverLogService.saveServerLog(serverLog);
                 serverLogs.add(ServerLogDto.builder()
                         .id(serverLog.getId().toString())
                         .username(serverLog.getCreatedBy())
@@ -125,5 +125,15 @@ public class ServerLogController {
         }
 
         return new ResponseEntity<>(serverLogs, HttpStatus.OK);
+    }
+
+    @PostMapping("/error-log")
+    public ResponseEntity error() {
+        try {
+            serverLogService.getError(null);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
     }
 }
