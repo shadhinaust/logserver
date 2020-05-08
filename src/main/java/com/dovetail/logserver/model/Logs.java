@@ -21,7 +21,7 @@ public class Logs {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "eventDate")
+    @Column(name = "event_date")
     private LocalDate eventDate;
 
     @Column(name = "logger")
