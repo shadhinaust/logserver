@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
 	<Properties>
-		<Property name="path">./logs</Property>
-		<Property name="pattern">[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n</Property>
+		<Property name="FILE_PATH">./logs</Property>
+		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %-5pid --- [%t] %-60C{1.}: %msg%n%throwable</Property>
 		<Property name="CONNECTION_STRING">${bundle:application:spring.datasource.url}
 		</Property>
 		<Property name="DRIVER_CLASS">${bundle:application:spring.datasource.driverClassName}
@@ -15,14 +15,14 @@
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout>
-				<pattern>${pattern}</pattern>
+				<pattern>${LOG_PATTERN}</pattern>
 			</PatternLayout>
 		</Console>
 		<RollingFile name="FileRolling"
-			fileName="${path}/rolling.log"
-			filePattern="${path}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.log">
+			fileName="${FILE_PATH}/rolling.log"
+			filePattern="${FILE_PATH}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.log">
 			<PatternLayout>
-				<pattern>${pattern}</pattern>
+				<pattern>${LOG_PATTERN}</pattern>
 			</PatternLayout>
 			<Policies>
 				<CronTriggeringPolicy
@@ -34,20 +34,22 @@
 			<DriverManager connectionString="${CONNECTION_STRING}"
 				driverClassName="${DRIVER_CLASS}" userName="${USERNAME}"
 				password="${PASSWORD}" />
-			<Column name="event_date" isEventTimestamp="true" />
+			<Column name="date_time" isEventTimestamp="true" />
 			<Column name="level" pattern="%level" />
-			<Column name="logger" pattern="%logger" />
-			<Column name="message" pattern="%message" />
-			<Column name="exception" pattern="%ex{full}" />
+			<Column name="process_id" pattern="%pid" />
+			<Column name="thread_name" pattern="%t" />
+			<Column name="logger_name" pattern="%c" />
+			<Column name="message" pattern="%msg" />
+			<Column name="exception" pattern="%throwable " />
 		</JDBC>
 	</Appenders>
 	<Loggers>
+		<Logger name="com.dovetail.logserver" level="info">
+			<AppenderRef ref="Database" />
+		</Logger>
 		<Root level="info" additivity="false">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="FileRolling" />
 		</Root>
-		<Logger name="com.dovetail.logserver" level="info">
-			<AppenderRef ref="Database" />
-		</Logger>
 	</Loggers>
 </Configuration>

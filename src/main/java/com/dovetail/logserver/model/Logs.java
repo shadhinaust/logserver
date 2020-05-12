@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,18 +22,24 @@ public class Logs {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "event_date")
-    private LocalDate eventDate;
-
-    @Column(name = "logger")
-    private String logger;
-
+    @Column(name = "date_time")
+    private LocalDateTime dateTime;
+    
     @Column(name = "level")
     private String level;
+    
+    @Column(name = "process_id")
+    private Long processId;
+
+    @Column(name = "thread_name")
+    private String threadName;
+
+    @Column(name = "logger_name")
+    private String loggerName;
 
     @Column(name = "message")
     private String message;
-
+    
     @Column(name = "exception")
     private String exception;
 }
