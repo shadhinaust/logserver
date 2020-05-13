@@ -1,6 +1,6 @@
 package com.dovetail.logserver.service;
 
-import com.dovetail.logserver.model.Logs;
+import com.dovetail.logserver.model.ApplicationLog;
 import com.dovetail.logserver.repository.LogsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class LogsServiceImpl implements LogsService {
     private LogsRepository logsRepository;
 
     @Override
-    public List<Logs> findAllLogs() {
+    public List<ApplicationLog> findAllLogs() {
         return logsRepository.findAll();
     }
 }

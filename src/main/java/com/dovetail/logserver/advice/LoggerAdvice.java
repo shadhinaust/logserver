@@ -1,5 +1,7 @@
 package com.dovetail.logserver.advice;
 
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.ThreadContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -10,27 +12,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Aspect
 @Component
 public class LoggerAdvice {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LoggerAdvice.class);
-
     private void execBeforeLogger(JoinPoint joinPoint) {
-        LOG.info("Invoking: " + joinPoint.getSignature().toString());
+        ThreadContext.put("logType", "EVENT");
+        log.info("Invoking: " + joinPoint.getSignature().toString());
+        ThreadContext.clearAll();
     }
 
     private Object execAroundLogger(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Long startTime = System.currentTimeMillis();
         Object response = proceedingJoinPoint.proceed();
         Long endTime = System.currentTimeMillis();
-        LOG.info("Result fetched in " + (endTime - startTime) + " milliseconds.");
+        log.info("Result fetched in " + (endTime - startTime) + " milliseconds.");
         return response;
     }
 
     private void execAfterThrowingLogger(JoinPoint joinPoint, Exception ex) {
-        LOG.info("Exception occurred: " + ex.getMessage());
-        LOG.error(joinPoint.getSignature().toString() + "\nException Description: " + ex);
+        log.info("Exception occurred: " + ex.getMessage());
+        log.error(joinPoint.getSignature().toString() + "\nException Description: " + ex);
     }
 
     @Before("execution(* com.dovetail.logserver.controller.*.*(..))")

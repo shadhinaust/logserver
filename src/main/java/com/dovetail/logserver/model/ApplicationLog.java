@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "application_log")
-public class Logs {
+public class ApplicationLog {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -27,13 +27,10 @@ public class Logs {
     
     @Column(name = "level")
     private String level;
+
+    @Column(name = "log_type")
+    private String logType;
     
-    @Column(name = "process_id")
-    private Long processId;
-
-    @Column(name = "thread_name")
-    private String threadName;
-
     @Column(name = "logger_name")
     private String loggerName;
 

@@ -2,7 +2,8 @@
 <Configuration>
 	<Properties>
 		<Property name="FILE_PATH">./logs</Property>
-		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %-5pid --- [%t] %-60C{1.}: %msg%n%throwable</Property>
+		<Property name="LOG_TYPE">equals{%X{logType}}{}{SYSTEM}</Property>
+		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %-6${LOG_TYPE} %-5pid --- [%t] %-60C{1.}: %msg%n%throwable</Property>
 		<Property name="CONNECTION_STRING">${bundle:application:spring.datasource.url}
 		</Property>
 		<Property name="DRIVER_CLASS">${bundle:application:spring.datasource.driverClassName}
@@ -34,22 +35,24 @@
 			<DriverManager connectionString="${CONNECTION_STRING}"
 				driverClassName="${DRIVER_CLASS}" userName="${USERNAME}"
 				password="${PASSWORD}" />
+				
+			<!-- <ConnectionFactory class="com.dovetail.logserver.configuration.MemoryInitializerFactory" method="getDatabaseConnection" /> -->
 			<Column name="date_time" isEventTimestamp="true" />
 			<Column name="level" pattern="%level" />
-			<Column name="process_id" pattern="%pid" />
-			<Column name="thread_name" pattern="%t" />
+			<Column name="log_type" pattern="%equals{%X{logType}}{}{SYSTEM}" />
 			<Column name="logger_name" pattern="%c" />
 			<Column name="message" pattern="%msg" />
 			<Column name="exception" pattern="%throwable " />
 		</JDBC>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.dovetail.logserver" level="info">
+<!-- 		<Logger name="com.dovetail.logserver" level="info">
 			<AppenderRef ref="Database" />
-		</Logger>
+		</Logger> -->
 		<Root level="info" additivity="false">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="FileRolling" />
+			<AppenderRef ref="Database" />
 		</Root>
 	</Loggers>
 </Configuration>
