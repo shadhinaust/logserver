@@ -4,6 +4,6 @@ import com.dovetail.logserver.model.ApplicationLog;
 
 import java.util.List;
 
-public interface LogsService {
-    List<ApplicationLog> findAllLogs();
+public interface ApplicationLogService {
+    List<ApplicationLog> findAllApplicationLogs();
 }

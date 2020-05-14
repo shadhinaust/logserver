@@ -3,7 +3,7 @@ package com.dovetail.logserver.utils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ServerLogUtils {
+public class DateTimeUtils {
 
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss");
 

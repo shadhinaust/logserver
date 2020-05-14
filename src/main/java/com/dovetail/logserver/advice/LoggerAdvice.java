@@ -1,15 +1,12 @@
 package com.dovetail.logserver.advice;
 
-import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.ThreadContext;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.log4j.Log4j2;
@@ -19,67 +16,49 @@ import lombok.extern.log4j.Log4j2;
 @Component
 public class LoggerAdvice {
 
-    private void execBeforeLogger(JoinPoint joinPoint) {
-        ThreadContext.put("logType", "EVENT");
-        log.info("Invoking: " + joinPoint.getSignature().toString());
-        ThreadContext.clearAll();
-    }
+	private void printLog(Logger logger) {
+		ThreadContext.put("logType", logger.type().getLevel());
+		switch (logger.level()) {
+		case FATAL:
+			log.fatal(logger.message());
+			break;
+		case ERROR:
+			log.error(logger.message());
+			break;
+		case WARN:
+			log.warn(logger.message());
+			break;
+		case INFO:
+			log.info(logger.message());
+			break;
+		case DEBUG:
+			log.debug(logger.message());
+			break;
+		case TRACE:
+			log.trace(logger.message());
+			break;
+		}
+	}
 
-    private Object execAroundLogger(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Long startTime = System.currentTimeMillis();
-        Object response = proceedingJoinPoint.proceed();
-        Long endTime = System.currentTimeMillis();
-        log.info("Result fetched in " + (endTime - startTime) + " milliseconds.");
-        return response;
-    }
+	@Pointcut("@annotation(logger)")
+	public void callLogger(Logger logger) {
+	}
 
-    private void execAfterThrowingLogger(JoinPoint joinPoint, Exception ex) {
-        log.info("Exception occurred: " + ex.getMessage());
-        log.error(joinPoint.getSignature().toString() + "\nException Description: " + ex);
-    }
+	/*
+	@Before(value = "callLogger(logger)")
+	public void beforeLog(JoinPoint joinPoint, Logger logger) throws Throwable {
+		printLog(logger);
+	}
+	*/
 
-    @Before("execution(* com.dovetail.logserver.controller.*.*(..))")
-    public void controllerLoggerBefore(JoinPoint joinPoint) {
-        execBeforeLogger(joinPoint);
-    }
+	@AfterReturning(value = "callLogger(logger)", returning = "returningObj")
+	public void afterReturningLog(JoinPoint joinPoint, Logger logger, Object returningObj) throws Throwable {
+		printLog(logger);
+	}
 
-    @Around("execution(* com.dovetail.logserver.controller.*.*(..))")
-    public Object controllerLoggerAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        return execAroundLogger(proceedingJoinPoint);
-    }
-
-    @AfterThrowing(value = "execution(* com.dovetail.logserver.controller.*.*(..))", throwing = "ex")
-    public void controllerLoggerAfter(JoinPoint joinPoint, Exception ex) {
-        execAfterThrowingLogger(joinPoint, ex);
-    }
-
-    @Before("execution(* com.dovetail.logserver.service.*.*(..))")
-    public void serviceLoggerBefore(JoinPoint joinPoint) {
-        execBeforeLogger(joinPoint);
-    }
-
-    @Around("execution(* com.dovetail.logserver.service.*.*(..))")
-    public Object serviceLoggerAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        return execAroundLogger(proceedingJoinPoint);
-    }
-
-    @AfterThrowing(value = "execution(* com.dovetail.logserver.service.*.*(..))", throwing = "ex")
-    public void serviceLoggerAfter(JoinPoint joinPoint, Exception ex) {
-        execAfterThrowingLogger(joinPoint, ex);
-    }
-
-    @Before("execution(* com.dovetail.logserver.repository.*.*(..))")
-    public void repositoryLoggerBefore(JoinPoint joinPoint) {
-        execBeforeLogger(joinPoint);
-    }
-
-    @Around("execution(* com.dovetail.logserver.repository.*.*(..))")
-    public Object repositoryLoggerAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        return execAroundLogger(proceedingJoinPoint);
-    }
-
-    @AfterThrowing(value = "execution(* com.dovetail.logserver.repository.*.*(..))", throwing = "ex")
-    public void repositoryLoggerAfter(JoinPoint joinPoint, Exception ex) {
-        execAfterThrowingLogger(joinPoint, ex);
-    }
+	@AfterThrowing(value = "callLogger(logger)", throwing = "ex")
+	public void afterThrowingLog(JoinPoint joinPoint, Logger logger, Exception ex) {
+		ThreadContext.put("logType", logger.type().getLevel());
+		log.error(" Exception: " + ex);
+	}
 }
