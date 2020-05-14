@@ -1,56 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-	<Properties>
-		<Property name="FILE_PATH">../logs</Property>
-		<Property name="LOG_TYPE">equals{%X{logType}}{}{SYSTEM}</Property>
-		<Property name="LOGGER_NAME">[%t]</Property>
-		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %-6${LOG_TYPE} %-5pid --- ${LOGGER_NAME} %-60C{1.}: %msg%n%throwable
-		</Property>
-		<Property name="CONNECTION_STRING">${bundle:application:spring.datasource.url}
-		</Property>
-		<Property name="DRIVER_CLASS">${bundle:application:spring.datasource.driverClassName}
-		</Property>
-		<Property name="USERNAME">${bundle:application:spring.datasource.username}
-		</Property>
-		<Property name="PASSWORD">${bundle:application:spring.datasource.password}
-		</Property>
-	</Properties>
-	<Appenders>
-		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout>
-				<pattern>${LOG_PATTERN}</pattern>
-			</PatternLayout>
-		</Console>
-		<RollingFile name="FileRolling"
-			fileName="${FILE_PATH}/rolling.log"
-			filePattern="${FILE_PATH}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.log">
-			<PatternLayout>
-				<pattern>${LOG_PATTERN}</pattern>
-			</PatternLayout>
-			<Policies>
-				<CronTriggeringPolicy
-					schedule="*/1 * * * * ? *" />
-			</Policies>
-			<DefaultRolloverStrategy max="100" />
-		</RollingFile>
-		<JDBC name="Database" tableName="application_log">
-			<DriverManager
-				connectionString="${CONNECTION_STRING}"
-				driverClassName="${DRIVER_CLASS}" userName="${USERNAME}"
-				password="${PASSWORD}" />
-			<Column name="date_time" isEventTimestamp="true" />
-			<Column name="type" pattern="%equals{%X{logType}}{}{SYSTEM}" />
-			<Column name="level" pattern="%level" />
-			<Column name="logger_name" pattern="%c" />
-			<Column name="message" pattern="%msg" />
-			<Column name="exception" pattern="%throwable " />
-		</JDBC>
-	</Appenders>
-	<Loggers>
-		<Root level="info" additivity="false">
-			<AppenderRef ref="Console" />
-			<AppenderRef ref="FileRolling" />
-			<AppenderRef ref="Database" />
-		</Root>
-	</Loggers>
+    <Properties>
+        <Property name="FILE_PATH">../logs</Property>
+        <Property name="LOG_TYPE">equals{%X{logType}}{}{SYSTEM}</Property>
+        <Property name="LOGGER_NAME">[%t]</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %-6${LOG_TYPE} %-5pid --- ${LOGGER_NAME} %-60C{1.}: %msg%n%throwable
+        </Property>
+        <Property name="CONNECTION_STRING">${bundle:application:spring.datasource.url}</Property>
+        <Property name="DRIVER_CLASS">${bundle:application:spring.datasource.driverClassName}</Property>
+        <Property name="USERNAME">${bundle:application:spring.datasource.username}</Property>
+        <Property name="PASSWORD">${bundle:application:spring.datasource.password}</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>${LOG_PATTERN}</pattern>
+            </PatternLayout>
+        </Console>
+        <RollingFile name="FileRolling"
+					 fileName="${FILE_PATH}/rolling.log"
+                     filePattern="${FILE_PATH}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.log">
+            <PatternLayout>
+                <pattern>${LOG_PATTERN}</pattern>
+            </PatternLayout>
+            <Policies>
+                <CronTriggeringPolicy
+                        schedule="0 * * * * ? *"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+        <JDBC name="Database" tableName="application_log">
+            <DriverManager connectionString="${CONNECTION_STRING}" driverClassName="${DRIVER_CLASS}"
+                           userName="${USERNAME}" password="${PASSWORD}"/>
+            <Column name="date_time" isEventTimestamp="true"/>
+            <Column name="type" pattern="%equals{%X{logType}}{}{SYSTEM}"/>
+            <Column name="level" pattern="%level"/>
+            <Column name="logger_name" pattern="%c"/>
+            <Column name="message" pattern="%msg"/>
+            <Column name="exception" pattern="%throwable "/>
+        </JDBC>
+    </Appenders>
+    <Loggers>
+        <Root level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileRolling"/>
+            <AppenderRef ref="Database"/>
+        </Root>
+    </Loggers>
 </Configuration>

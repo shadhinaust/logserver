@@ -29,10 +29,10 @@ public class ApplicationLog {
 	private LocalDateTime dateTime;
 
 	@Column(name = "type")
-	private LogType type;
+	private String type;
 
 	@Column(name = "level")
-	private LogLevel level;
+	private String level;
 
 	@Column(name = "logger_name")
 	private String loggerName;
