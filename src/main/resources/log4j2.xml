@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
 	<Properties>
-		<Property name="FILE_PATH">./logs</Property>
+		<Property name="FILE_PATH">../logs</Property>
 		<Property name="LOG_TYPE">equals{%X{logType}}{}{SYSTEM}</Property>
 		<Property name="LOGGER_NAME">[%t]</Property>
-		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %-6${LOG_TYPE} %-5pid --- ${LOGGER_NAME} %-60C{1.}: %msg%n%throwable</Property>
+		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %-6${LOG_TYPE} %-5pid --- ${LOGGER_NAME} %-60C{1.}: %msg%n%throwable
+		</Property>
 		<Property name="CONNECTION_STRING">${bundle:application:spring.datasource.url}
 		</Property>
 		<Property name="DRIVER_CLASS">${bundle:application:spring.datasource.driverClassName}
@@ -33,28 +34,23 @@
 			<DefaultRolloverStrategy max="100" />
 		</RollingFile>
 		<JDBC name="Database" tableName="application_log">
-			<DriverManager connectionString="${CONNECTION_STRING}"
+			<DriverManager
+				connectionString="${CONNECTION_STRING}"
 				driverClassName="${DRIVER_CLASS}" userName="${USERNAME}"
 				password="${PASSWORD}" />
-
-			<!-- <ConnectionFactory class="com.dovetail.logserver.configuration.MemoryInitializerFactory" 
-				method="getDatabaseConnection" /> -->
 			<Column name="date_time" isEventTimestamp="true" />
+			<Column name="type" pattern="%equals{%X{logType}}{}{SYSTEM}" />
 			<Column name="level" pattern="%level" />
-			<Column name="log_type"
-				pattern="%equals{%X{logType}}{}{SYSTEM}" />
 			<Column name="logger_name" pattern="%c" />
 			<Column name="message" pattern="%msg" />
 			<Column name="exception" pattern="%throwable " />
 		</JDBC>
 	</Appenders>
 	<Loggers>
-		<!-- <Logger name="com.dovetail.logserver" level="info"> <AppenderRef ref="Database" 
-			/> </Logger> -->
 		<Root level="info" additivity="false">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="FileRolling" />
-			<!-- <AppenderRef ref="Database" /> -->
+			<AppenderRef ref="Database" />
 		</Root>
 	</Loggers>
 </Configuration>
