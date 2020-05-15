@@ -18,8 +18,8 @@
             </PatternLayout>
         </Console>
         <RollingFile name="FileRolling"
-					 fileName="${FILE_PATH}/rolling.log"
-                     filePattern="${FILE_PATH}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.log">
+                     fileName="${FILE_PATH}/rolling.logi"
+                     filePattern="${FILE_PATH}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.logi">
             <PatternLayout>
                 <pattern>${LOG_PATTERN}</pattern>
             </PatternLayout>
@@ -41,10 +41,24 @@
         </JDBC>
     </Appenders>
     <Loggers>
+        <Logger name="com.dovetail.logserver.log" level="info">
+            <AppenderRef ref="Database"/>
+        </Logger>
+        <Logger name="com.dovetail.logserver.controller" level="info">
+            <AppenderRef ref="Database"/>
+        </Logger>
+        <Logger name="com.dovetail.logserver.service" level="info">
+            <AppenderRef ref="Database"/>
+        </Logger>
+        <Logger name="com.dovetail.logserver.repository" level="info">
+            <AppenderRef ref="Database"/>
+        </Logger>
+        <Logger name="com.dovetail.logserver.utils" level="info">
+            <AppenderRef ref="Database"/>
+        </Logger>
         <Root level="info" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileRolling"/>
-            <AppenderRef ref="Database"/>
         </Root>
     </Loggers>
 </Configuration>

@@ -1,13 +1,36 @@
 package com.dovetail.logserver.log;
 
+import com.dovetail.logserver.model.LogLevel;
+import com.dovetail.logserver.model.LogType;
+
 public interface Log {
-	void error(Message message);
+    void fatal(String message);
 
-	void warn(Message message);
+    void fatal(LogType type, String message);
 
-	void info(Message message);
+    void error(String message);
 
-	void debug(Message message);
+    void error(LogType type, String message);
 
-	void trace(Message message);
+    void warn(String message);
+
+    void warn(LogType type, String message);
+
+    void info(String message);
+
+    void info(LogType type, String message);
+
+    void debug(String message);
+
+    void debug(LogType type, String message);
+
+    void trace(String message);
+
+    void trace(LogType type, String message);
+
+    void log(String message);
+
+    void log(LogLevel level, String message);
+
+    void log(LogType type, LogLevel level, String message);
 }

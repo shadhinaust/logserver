@@ -9,7 +9,7 @@
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS server_logs (
-  id bigint(20) NOT NULL AUTO_INCREMENT PRIMERY KEY,
+  id identity,
   created_at datetime(6) DEFAULT NULL,
   created_by varchar(255) DEFAULT NULL,
   modified_at datetime(6) DEFAULT NULL,
