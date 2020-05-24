@@ -68,7 +68,7 @@ public class ApplicationLogServiceFacadeImpl implements ApplicationLogServiceFac
         return ResponseDto.builder().
                 data(logs)
                 .hasNext(logPage.hasNext())
-                .next(logPage.getTotalPages())
+                .totalPages(logPage.getTotalPages())
                 .build();
     }
 }

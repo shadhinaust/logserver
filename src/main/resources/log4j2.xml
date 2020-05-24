@@ -18,8 +18,8 @@
             </PatternLayout>
         </Console>
         <RollingFile name="FileRolling"
-                     fileName="${FILE_PATH}/rolling.logi"
-                     filePattern="${FILE_PATH}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.logi">
+                     fileName="${FILE_PATH}/rolling.log"
+                     filePattern="${FILE_PATH}/cron-based-logs/%d{yyyy-MM-dd-hh-mm}-%i.log">
             <PatternLayout>
                 <pattern>${LOG_PATTERN}</pattern>
             </PatternLayout>
