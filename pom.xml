@@ -38,19 +38,16 @@
 		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-devtools</artifactId> 
 			<version>2.2.6.RELEASE</version> </dependency> -->
 
-		<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -58,14 +55,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -73,16 +62,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-aop 
-			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-aop</artifactId> 
-			</dependency> -->
 
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -107,7 +91,6 @@
 			</exclusions>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
